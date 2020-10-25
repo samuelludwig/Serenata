@@ -2,8 +2,6 @@
 
 namespace Serenata\Analysis\Typing;
 
-use RuntimeException;
-
 use Serenata\Indexing\Structures;
 
 /**
@@ -13,8 +11,6 @@ interface FileClasslikeListProviderInterface
 {
     /**
      * @param Structures\File $file
-     *
-     * @throws RuntimeException
      *
      * @return array<string,array<string,mixed>> mapping FQCN's to classlikes.
      */

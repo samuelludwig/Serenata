@@ -1,26 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Unused @throws RuntimeException annotation$#"
-			count: 1
-			path: src/Analysis/AnnotationFilteringClasslikeListProvider.php
-
-		-
-			message: "#^Unused @throws RuntimeException annotation$#"
-			count: 1
-			path: src/Analysis/ClassFilteringClasslikeListProvider.php
-
-		-
-			message: "#^Unused @throws RuntimeException annotation$#"
-			count: 1
-			path: src/Analysis/ClasslikeListRegistry.php
-
-		-
-			message: "#^Unused @throws RuntimeException annotation$#"
-			count: 1
-			path: src/Analysis/ConstantListRegistry.php
-
-		-
 			message: "#^Unused @throws Serenata\\\\NameQualificationUtilities\\\\Exception\\\\MalformedNameEncounteredException annotation$#"
 			count: 1
 			path: src/Analysis/DocblockPositionalNameResolver.php
@@ -29,116 +9,6 @@ parameters:
 			message: "#^Unused @throws Serenata\\\\NameQualificationUtilities\\\\Exception\\\\UnresolvableNameEncounteredException annotation$#"
 			count: 1
 			path: src/Analysis/DocblockPositionalNameResolver.php
-
-		-
-			message: "#^Missing @throws Serenata\\\\NameQualificationUtilities\\\\Exception\\\\MalformedNameEncounteredException annotation$#"
-			count: 1
-			path: src/Analysis/DocblockPositionalNameResolver.php
-
-		-
-			message: "#^Unused @throws RuntimeException annotation$#"
-			count: 2
-			path: src/Analysis/DoctrineClasslikeListProvider.php
-
-		-
-			message: "#^Doctrine\\\\DBAL\\\\Exception\\\\DriverException is never thrown in the corresponding try block$#"
-			count: 2
-			path: src/Analysis/DoctrineClasslikeListProvider.php
-
-		-
-			message: "#^Unused @throws RuntimeException annotation$#"
-			count: 1
-			path: src/Analysis/DoctrineConstantListProvider.php
-
-		-
-			message: "#^Doctrine\\\\DBAL\\\\Exception\\\\DriverException is never thrown in the corresponding try block$#"
-			count: 1
-			path: src/Analysis/DoctrineConstantListProvider.php
-
-		-
-			message: "#^Unused @throws RuntimeException annotation$#"
-			count: 1
-			path: src/Analysis/DoctrineFunctionListProvider.php
-
-		-
-			message: "#^Doctrine\\\\DBAL\\\\Exception\\\\DriverException is never thrown in the corresponding try block$#"
-			count: 1
-			path: src/Analysis/DoctrineFunctionListProvider.php
-
-		-
-			message: "#^Unused @throws RuntimeException annotation$#"
-			count: 2
-			path: src/Analysis/DoctrineNamespaceListProvider.php
-
-		-
-			message: "#^Doctrine\\\\DBAL\\\\Exception\\\\DriverException is never thrown in the corresponding try block$#"
-			count: 2
-			path: src/Analysis/DoctrineNamespaceListProvider.php
-
-		-
-			message: "#^Unused @throws RuntimeException annotation$#"
-			count: 1
-			path: src/Analysis/FunctionListRegistry.php
-
-		-
-			message: "#^Unused @throws RuntimeException annotation$#"
-			count: 1
-			path: src/Analysis/InterfaceFilteringClasslikeListProvider.php
-
-		-
-			message: "#^Unused @throws RuntimeException annotation$#"
-			count: 1
-			path: src/Analysis/NamespaceListRegistry.php
-
-		-
-			message: "#^Missing @throws Serenata\\\\NameQualificationUtilities\\\\Exception\\\\MalformedNameEncounteredException annotation$#"
-			count: 1
-			path: src/Analysis/Node/ConstFetchNodeFqsenDeterminer.php
-
-		-
-			message: "#^Missing @throws Serenata\\\\NameQualificationUtilities\\\\Exception\\\\MalformedNameEncounteredException annotation$#"
-			count: 1
-			path: src/Analysis/Node/FunctionCallNodeFqsenDeterminer.php
-
-		-
-			message: "#^Unused @throws UnexpectedValueException annotation$#"
-			count: 2
-			path: src/Analysis/Node/FunctionFunctionInfoRetriever.php
-
-		-
-			message: "#^Unused @throws UnexpectedValueException annotation$#"
-			count: 1
-			path: src/Analysis/Node/MethodCallMethodInfoRetriever.php
-
-		-
-			message: "#^Useless @throws UnexpectedValueException annotation$#"
-			count: 1
-			path: src/Analysis/Node/MethodCallMethodInfoRetriever.php
-
-		-
-			message: "#^Missing @throws Serenata\\\\Analysis\\\\Typing\\\\Deduction\\\\TypeDeductionException annotation$#"
-			count: 1
-			path: src/Analysis/Node/MethodCallMethodInfoRetriever.php
-
-		-
-			message: "#^Missing @throws Serenata\\\\NameQualificationUtilities\\\\Exception\\\\MalformedNameEncounteredException annotation$#"
-			count: 1
-			path: src/Analysis/Node/NameNodeFqsenDeterminer.php
-
-		-
-			message: "#^Unused @throws UnexpectedValueException annotation$#"
-			count: 1
-			path: src/Analysis/Node/PropertyFetchPropertyInfoRetriever.php
-
-		-
-			message: "#^Useless @throws UnexpectedValueException annotation$#"
-			count: 1
-			path: src/Analysis/Node/PropertyFetchPropertyInfoRetriever.php
-
-		-
-			message: "#^Missing @throws Serenata\\\\Analysis\\\\Typing\\\\Deduction\\\\TypeDeductionException annotation$#"
-			count: 1
-			path: src/Analysis/Node/PropertyFetchPropertyInfoRetriever.php
 
 		-
 			message: "#^Unused @throws UnexpectedValueException annotation$#"
@@ -151,24 +21,14 @@ parameters:
 			path: src/Analysis/SourceCodeReading/FileSourceCodeStreamReader.php
 
 		-
-			message: "#^Unused @throws Serenata\\\\NameQualificationUtilities\\\\Exception\\\\UnresolvableNameEncounteredException annotation$#"
+			message: "#^Unused @throws Serenata\\\\NameQualificationUtilities\\\\Exception\\\\MalformedNameEncounteredException annotation$#"
 			count: 1
 			path: src/Analysis/SpecialNameIgnoringPositionalNameResolver.php
 
 		-
-			message: "#^Missing @throws Serenata\\\\NameQualificationUtilities\\\\Exception\\\\MalformedNameEncounteredException annotation$#"
-			count: 2
-			path: src/Analysis/StorageFileNamespaceProvider.php
-
-		-
-			message: "#^Unused @throws RuntimeException annotation$#"
+			message: "#^Unused @throws Serenata\\\\NameQualificationUtilities\\\\Exception\\\\UnresolvableNameEncounteredException annotation$#"
 			count: 1
-			path: src/Analysis/TraitFilteringClasslikeListProvider.php
-
-		-
-			message: "#^Missing @throws Serenata\\\\NameQualificationUtilities\\\\Exception\\\\MalformedNameEncounteredException annotation$#"
-			count: 1
-			path: src/Analysis/Typing/Deduction/ConstFetchNodeTypeDeducer.php
+			path: src/Analysis/SpecialNameIgnoringPositionalNameResolver.php
 
 		-
 			message: "#^Missing @throws Serenata\\\\Analysis\\\\Typing\\\\Deduction\\\\TypeDeductionException annotation$#"
@@ -186,24 +46,9 @@ parameters:
 			path: src/Analysis/Typing/Deduction/NameNodeTypeDeducer.php
 
 		-
-			message: "#^Missing @throws Serenata\\\\NameQualificationUtilities\\\\Exception\\\\MalformedNameEncounteredException annotation$#"
-			count: 1
-			path: src/Analysis/Typing/Deduction/NameNodeTypeDeducer.php
-
-		-
 			message: "#^Unused @throws DomainException annotation$#"
 			count: 2
 			path: src/Analysis/Typing/Deduction/NodeTypeDeducer.php
-
-		-
-			message: "#^Unused @throws RuntimeException annotation$#"
-			count: 1
-			path: src/Analysis/Typing/FileClasslikeListProviderCachingDecorator.php
-
-		-
-			message: "#^Missing @throws Serenata\\\\NameQualificationUtilities\\\\Exception\\\\MalformedNameEncounteredException annotation$#"
-			count: 1
-			path: src/Analysis/Typing/TypeResolvingDocblockTypeTransformer.php
 
 		-
 			message: "#^Unused @throws PhpParser\\\\Error annotation$#"
@@ -229,11 +74,6 @@ parameters:
 			message: "#^Unused @throws Serenata\\\\Commands\\\\BadCommandArgumentsException annotation$#"
 			count: 7
 			path: src/Commands/CommandFactory.php
-
-		-
-			message: "#^Missing @throws Serenata\\\\NameQualificationUtilities\\\\Exception\\\\MalformedNameEncounteredException annotation$#"
-			count: 1
-			path: src/GotoDefinition/DocblockDefinitionLocator.php
 
 		-
 			message: "#^Unused @throws PhpParser\\\\Error annotation$#"
@@ -511,11 +351,6 @@ parameters:
 			path: src/UserInterface/JsonRpcQueueItemHandler/InitializedJsonRpcQueueItemHandler.php
 
 		-
-			message: "#^Missing @throws Serenata\\\\NameQualificationUtilities\\\\Exception\\\\MalformedNameEncounteredException annotation$#"
-			count: 1
-			path: src/UserInterface/JsonRpcQueueItemHandler/LocalizeTypeJsonRpcQueueItemHandler.php
-
-		-
 			message: "#^Unused @throws Throwable annotation$#"
 			count: 1
 			path: src/UserInterface/JsonRpcQueueItemHandler/LogTraceJsonRpcQueueItemHandler.php
@@ -527,11 +362,6 @@ parameters:
 
 		-
 			message: "#^Unused @throws Serenata\\\\UserInterface\\\\JsonRpcQueueItemHandler\\\\InvalidArgumentsException annotation$#"
-			count: 1
-			path: src/UserInterface/JsonRpcQueueItemHandler/ResolveTypeJsonRpcQueueItemHandler.php
-
-		-
-			message: "#^Missing @throws Serenata\\\\NameQualificationUtilities\\\\Exception\\\\MalformedNameEncounteredException annotation$#"
 			count: 1
 			path: src/UserInterface/JsonRpcQueueItemHandler/ResolveTypeJsonRpcQueueItemHandler.php
 

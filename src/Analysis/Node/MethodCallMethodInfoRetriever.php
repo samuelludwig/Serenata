@@ -10,6 +10,7 @@ use Serenata\Analysis\ClasslikeInfoBuilderInterface;
 use Serenata\Analysis\ClasslikeBuildingFailedException;
 
 use Serenata\Analysis\Typing\Deduction\TypeDeductionContext;
+use Serenata\Analysis\Typing\Deduction\TypeDeductionException;
 use Serenata\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
 use Serenata\Common\Position;
@@ -61,9 +62,6 @@ final class MethodCallMethodInfoRetriever
      * @param TextDocumentItem                                         $textDocumentItem
      * @param Position                                                 $position
      *
-     * @throws UnexpectedValueException when a dynamic method call is passed.
-     * @throws UnexpectedValueException when the type the method is called on could not be determined.
-     *
      * @return array[]
      */
     public function retrieve(Node\Expr $node, TextDocumentItem $textDocumentItem, Position $position): array
@@ -88,11 +86,15 @@ final class MethodCallMethodInfoRetriever
 
         $objectNode = ($node instanceof Node\Expr\MethodCall) ? $node->var : $node->class;
 
-        $typeOfVar = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
-            $objectNode,
-            $textDocumentItem,
-            $position
-        ));
+        try {
+            $typeOfVar = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
+                $objectNode,
+                $textDocumentItem,
+                $position
+            ));
+        } catch (TypeDeductionException $e) {
+            throw new UnexpectedValueException('Could not fetch method call method info', 0, $e);
+        }
 
         $infoElements = [];
 

@@ -2,8 +2,6 @@
 
 namespace Serenata\Analysis;
 
-use RuntimeException;
-
 use Serenata\Indexing\Structures;
 
 /**
@@ -13,8 +11,6 @@ interface FileNamespaceListProviderInterface
 {
     /**
      * @param Structures\File $file
-     *
-     * @throws RuntimeException
      *
      * @return array<string,array<string,mixed>> mapping namespace ID's to namespaces.
      */

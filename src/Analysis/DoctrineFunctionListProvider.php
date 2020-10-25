@@ -2,10 +2,6 @@
 
 namespace Serenata\Analysis;
 
-use RuntimeException;
-
-use Doctrine\DBAL\Exception\DriverException;
-
 use Serenata\Analysis\Conversion\FunctionConverter;
 
 use Serenata\Indexing\Structures;
@@ -44,11 +40,7 @@ final class DoctrineFunctionListProvider implements FunctionListProviderInterfac
         $items = [];
         $result = [];
 
-        try {
-            $items = $this->managerRegistry->getRepository(Structures\Function_::class)->findAll();
-        } catch (DriverException $e) {
-            throw new RuntimeException($e->getMessage(), 0, $e);
-        }
+        $items = $this->managerRegistry->getRepository(Structures\Function_::class)->findAll();
 
         foreach ($items as $function) {
             $result[$function->getFqcn()] = $this->functionConverter->convert($function);

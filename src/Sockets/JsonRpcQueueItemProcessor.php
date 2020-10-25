@@ -2,9 +2,10 @@
 
 namespace Serenata\Sockets;
 
+use Exception;
 use Throwable;
+use LogicException;
 use DomainException;
-use RuntimeException;
 
 use Ds\Vector;
 
@@ -128,7 +129,7 @@ final class JsonRpcQueueItemProcessor
             return new JsonRpcError(JsonRpcErrorCode::INVALID_PARAMS, $throwable->getMessage(), $data);
         } elseif ($throwable instanceof IncorrectDatabaseVersionException) {
             return new JsonRpcError(JsonRpcErrorCode::DATABASE_VERSION_MISMATCH, $throwable->getMessage(), $data);
-        } elseif ($throwable instanceof RuntimeException) {
+        } elseif ($throwable instanceof Exception && !$throwable instanceof LogicException) {
             return new JsonRpcError(JsonRpcErrorCode::GENERIC_RUNTIME_ERROR, $throwable->getMessage(), $data);
         }
 

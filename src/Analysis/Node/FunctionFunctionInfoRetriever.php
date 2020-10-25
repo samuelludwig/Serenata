@@ -45,8 +45,6 @@ final class FunctionFunctionInfoRetriever
      * @param TextDocumentItem                       $textDocumentItem
      * @param Position                               $position
      *
-     * @throws UnexpectedValueException when the function wasn't found.
-     *
      * @return array<string,mixed>
      */
     public function retrieve(Node $node, TextDocumentItem $textDocumentItem, Position $position): array
@@ -69,8 +67,6 @@ final class FunctionFunctionInfoRetriever
 
     /**
      * @param string $fullyQualifiedName
-     *
-     * @throws UnexpectedValueException
      *
      * @return array<string,mixed>
      */

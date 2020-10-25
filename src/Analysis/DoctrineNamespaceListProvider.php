@@ -2,10 +2,6 @@
 
 namespace Serenata\Analysis;
 
-use RuntimeException;
-
-use Doctrine\DBAL\Exception\DriverException;
-
 use Serenata\Analysis\Conversion\NamespaceConverter;
 
 use Serenata\Indexing\Structures;
@@ -41,11 +37,7 @@ final class DoctrineNamespaceListProvider implements FileNamespaceListProviderIn
      */
     public function getAll(): array
     {
-        try {
-            $namespaces = $this->managerRegistry->getRepository(Structures\FileNamespace::class)->findAll();
-        } catch (DriverException $e) {
-            throw new RuntimeException($e->getMessage(), 0, $e);
-        }
+        $namespaces = $this->managerRegistry->getRepository(Structures\FileNamespace::class)->findAll();
 
         return $this->mapNamespaces($namespaces);
     }
@@ -55,13 +47,9 @@ final class DoctrineNamespaceListProvider implements FileNamespaceListProviderIn
      */
     public function getAllForFile(Structures\File $file): array
     {
-        try {
-            $namespaces = $this->managerRegistry->getRepository(Structures\FileNamespace::class)->findBy([
-                'file' => $file,
-            ]);
-        } catch (DriverException $e) {
-            throw new RuntimeException($e->getMessage(), 0, $e);
-        }
+        $namespaces = $this->managerRegistry->getRepository(Structures\FileNamespace::class)->findBy([
+            'file' => $file,
+        ]);
 
         return $this->mapNamespaces($namespaces);
     }

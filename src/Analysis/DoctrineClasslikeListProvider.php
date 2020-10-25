@@ -2,10 +2,6 @@
 
 namespace Serenata\Analysis;
 
-use RuntimeException;
-
-use Doctrine\DBAL\Exception\DriverException;
-
 use Serenata\Analysis\Conversion\ClasslikeConverter;
 
 use Serenata\Analysis\Typing\FileClasslikeListProviderInterface;
@@ -43,11 +39,7 @@ final class DoctrineClasslikeListProvider implements FileClasslikeListProviderIn
      */
     public function getAll(): array
     {
-        try {
-            $items = $this->managerRegistry->getRepository(Structures\Classlike::class)->findAll();
-        } catch (DriverException $e) {
-            throw new RuntimeException($e->getMessage(), 0, $e);
-        }
+        $items = $this->managerRegistry->getRepository(Structures\Classlike::class)->findAll();
 
         return $this->mapClasslikes($items);
     }
@@ -57,13 +49,9 @@ final class DoctrineClasslikeListProvider implements FileClasslikeListProviderIn
      */
     public function getAllForFile(Structures\File $file): array
     {
-        try {
-            $items = $this->managerRegistry->getRepository(Structures\Classlike::class)->findBy([
-                'file' => $file,
-            ]);
-        } catch (DriverException $e) {
-            throw new RuntimeException($e->getMessage(), 0, $e);
-        }
+        $items = $this->managerRegistry->getRepository(Structures\Classlike::class)->findBy([
+            'file' => $file,
+        ]);
 
         return $this->mapClasslikes($items);
     }

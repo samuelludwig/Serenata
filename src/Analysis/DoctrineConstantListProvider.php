@@ -2,10 +2,6 @@
 
 namespace Serenata\Analysis;
 
-use RuntimeException;
-
-use Doctrine\DBAL\Exception\DriverException;
-
 use Serenata\Analysis\Conversion\ConstantConverter;
 
 use Serenata\Indexing\Structures;
@@ -41,14 +37,8 @@ final class DoctrineConstantListProvider implements ConstantListProviderInterfac
      */
     public function getAll(): array
     {
-        $items = [];
         $constants = [];
-
-        try {
-            $items = $this->managerRegistry->getRepository(Structures\Constant::class)->findAll();
-        } catch (DriverException $e) {
-            throw new RuntimeException($e->getMessage(), 0, $e);
-        }
+        $items = $this->managerRegistry->getRepository(Structures\Constant::class)->findAll();
 
         foreach ($items as $constant) {
             $constants[$constant->getFqcn()] = $this->constantConverter->convert($constant);

@@ -28,7 +28,7 @@
         "react/promise": "^2.7",
         "react/socket": "^1.3",
         "serenata/common": "^0.3.3",
-        "serenata/name-qualification-utilities": "^0.5",
+        "serenata/name-qualification-utilities": "^0.6",
         "symfony/config": "^5.1",
         "symfony/console": "^5.1",
         "symfony/dependency-injection": "^5.1",

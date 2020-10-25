@@ -12,6 +12,7 @@ use Serenata\Analysis\ClasslikeInfoBuilderInterface;
 use Serenata\Analysis\ClasslikeBuildingFailedException;
 
 use Serenata\Analysis\Typing\Deduction\TypeDeductionContext;
+use Serenata\Analysis\Typing\Deduction\TypeDeductionException;
 use Serenata\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
 use Serenata\Common\Position;
@@ -60,9 +61,6 @@ final class PropertyFetchPropertyInfoRetriever
      * @param TextDocumentItem                                      $textDocumentItem
      * @param Position                                              $position
      *
-     * @throws UnexpectedValueException when a dynamic property fetch is passed.
-     * @throws UnexpectedValueException when the type the property is fetched from could not be determined.
-     *
      * @return array<array<string,mixed>>
      */
     public function retrieve(Node\Expr $node, TextDocumentItem $textDocumentItem, Position $position): array
@@ -74,11 +72,15 @@ final class PropertyFetchPropertyInfoRetriever
 
         $objectNode = ($node instanceof Node\Expr\PropertyFetch) ? $node->var : $node->class;
 
-        $typeOfVar = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
-            $objectNode,
-            $textDocumentItem,
-            $position
-        ));
+        try {
+            $typeOfVar = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
+                $objectNode,
+                $textDocumentItem,
+                $position
+            ));
+        } catch (TypeDeductionException $e) {
+            throw new UnexpectedValueException('Could not fetch property fetch property info', 0, $e);
+        }
 
         $infoElements = [];
 
