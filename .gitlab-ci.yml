@@ -17,7 +17,11 @@ include:
         - echo "4b4b118cc54662e4813ba86efb215fdb19c5b29944c5919b4f2803c915aa2234  composer.phar" > checksums
         - sha256sum -c checksums
 
-        - php composer.phar update --prefer-dist --optimize-autoloader --no-interaction --no-progress
+        # NOTE: Ignoring platform requirements is currently required for PHP 8 to work because the following
+        # dependencies don't allow PHP 8 yet in their requirements, but do work with it:
+        #   - pepakriz/phpstan-exception-rules
+        #   - doctrine/orm
+        - php composer.phar update --prefer-dist --optimize-autoloader --no-interaction --no-progress --ignore-platform-reqs
 
 .build-job-shared: &build-job-shared
     stage: build
@@ -127,7 +131,11 @@ test:php-8.0:
         - sha256sum -c checksums
 
         # Do a clean install so we can avoid including dev dependencies.
-        - php composer.phar update --prefer-dist --optimize-autoloader --no-interaction --no-progress --no-dev
+        # NOTE: Ignoring platform requirements is currently required for PHP 8 to work because the following
+        # dependencies don't allow PHP 8 yet in their requirements, but do work with it:
+        #   - pepakriz/phpstan-exception-rules
+        #   - doctrine/orm
+        - php composer.phar update --prefer-dist --optimize-autoloader --no-interaction --no-progress --no-dev --ignore-platform-reqs
         - php -d phar.readonly=0 bin/create-phar
     cache:
         key: "$CI_JOB_NAME-composer-no-dev"
