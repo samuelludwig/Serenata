@@ -66,7 +66,6 @@ final class UseStatementInsertionCreator
      * @param Position         $position
      * @param bool             $allowAdditionalNewlines
      *
-     * @throws UseStatementAlreadyExistsException
      * @throws UseStatementInsertionCreationException
      *
      * @return TextEdit
@@ -126,6 +125,8 @@ final class UseStatementInsertionCreator
      * @param string           $kind
      * @param TextDocumentItem $textDocumentItem
      * @param Position         $position
+     *
+     * @throws UseStatementInsertionCreationException
      */
     private function enforceThatCreationIsPossibleAndNecessary(
         string $name,
@@ -176,6 +177,8 @@ final class UseStatementInsertionCreator
      * @param string           $kind
      * @param TextDocumentItem $textDocumentItem
      * @param Position         $position
+     *
+     * @throws UseStatementInsertionCreationException
      *
      * @return int
      */
@@ -237,6 +240,8 @@ final class UseStatementInsertionCreator
      * @param string           $kind
      * @param TextDocumentItem $textDocumentItem
      * @param Position         $position
+     *
+     * @throws UseStatementInsertionCreationException
      *
      * @return bool
      */
@@ -313,6 +318,8 @@ final class UseStatementInsertionCreator
      * @param TextDocumentItem $textDocumentItem
      * @param Position         $position
      *
+     * @throws UseStatementInsertionCreationException
+     *
      * @return bool
      */
     private function shouldInsertBelowLineOfBestMatch(
@@ -345,8 +352,10 @@ final class UseStatementInsertionCreator
     }
 
     /**
-    * @param TextDocumentItem $textDocumentItem
-    * @param Position         $position
+     * @param TextDocumentItem $textDocumentItem
+     * @param Position         $position
+     *
+     * @throws UseStatementInsertionCreationException
      *
      * @return (Node\Stmt\Use_|Node\Stmt\GroupUse)[]
      */
@@ -364,6 +373,8 @@ final class UseStatementInsertionCreator
     /**
      * @param TextDocumentItem $textDocumentItem
      * @param Position         $position
+     *
+     * @throws UseStatementInsertionCreationException
      *
      * @return int
      */
@@ -393,6 +404,8 @@ final class UseStatementInsertionCreator
      * @param string           $kind
      * @param TextDocumentItem $textDocumentItem
      * @param Position         $position
+     *
+     * @throws UseStatementInsertionCreationException
      *
      * @return bool
      */
@@ -522,6 +535,8 @@ final class UseStatementInsertionCreator
      * @param TextDocumentItem $textDocumentItem
      * @param Position         $position
      *
+     * @throws UseStatementInsertionCreationException
+     *
      * @return Node\Stmt\Namespace_|null
      */
     private function locateActiveNamespaceAt(
@@ -622,8 +637,6 @@ final class UseStatementInsertionCreator
 
     /**
      * @param string $code
-     *
-     * @throws UnexpectedValueException
      *
      * @return Node[]
      */

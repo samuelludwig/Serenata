@@ -376,21 +376,6 @@ parameters:
 			path: src/Parsing/PhpstanDocblockTypeParser.php
 
 		-
-			message: "#^Unused @throws Serenata\\\\Refactoring\\\\UseStatementInsertionCreationException annotation$#"
-			count: 2
-			path: src/Refactoring/UseStatementInsertionCreator.php
-
-		-
-			message: "#^Useless @throws Serenata\\\\Refactoring\\\\UseStatementAlreadyExistsException annotation$#"
-			count: 1
-			path: src/Refactoring/UseStatementInsertionCreator.php
-
-		-
-			message: "#^Unused @throws UnexpectedValueException annotation$#"
-			count: 1
-			path: src/Refactoring/UseStatementInsertionCreator.php
-
-		-
 			message: "#^Unused @throws UnexpectedValueException annotation$#"
 			count: 1
 			path: src/SignatureHelp/SignatureHelpRetriever.php

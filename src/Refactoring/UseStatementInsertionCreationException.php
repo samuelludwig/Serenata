@@ -2,13 +2,13 @@
 
 namespace Serenata\Refactoring;
 
-use RuntimeException;
+use Exception;
 
 /**
  * Indicates something went wrong during use statement insertion creation.
  *
  * @final
  */
-class UseStatementInsertionCreationException extends RuntimeException
+class UseStatementInsertionCreationException extends Exception
 {
 }
