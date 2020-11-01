@@ -340,12 +340,18 @@ final class InitializeJsonRpcQueueItemHandlerTest extends AbstractIntegrationTes
             true
         );
 
+        $this->getRequestQueue()->pop(); // echoMessage, ignore.
+        $this->getRequestQueue()->pop(); // echoMessage, ignore.
+
         self::assertEquals(new JsonRpcRequest(null, 'serenata/internal/index', [
             'textDocument' => [
                 'uri' => $uri . '/Folder1/File1.phpt',
             ],
         ]), $this->getRequestQueue()->pop()->getRequest());
 
+        $this->getRequestQueue()->pop(); // echoMessage, ignore.
+        $this->getRequestQueue()->pop(); // echoMessage, ignore.
+        $this->getRequestQueue()->pop(); // echoMessage, ignore.
         $this->getRequestQueue()->pop(); // echoMessage, ignore.
 
         self::assertEquals(new JsonRpcRequest(null, 'serenata/internal/index', [

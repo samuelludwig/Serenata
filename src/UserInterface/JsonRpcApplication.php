@@ -72,9 +72,7 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcMes
     public function handle(JsonRpcMessageInterface $message, JsonRpcMessageSenderInterface $jsonRpcMessageSender): void
     {
         if (!$message instanceof JsonRpcRequest) {
-            throw new UnexpectedValueException(
-                "Serenata doesn't know how to react to responses at the moment and can only handle requests"
-            );
+            return; // We currently don't know how to handle responses from the client to requests we sent.
         }
 
         /** @var JsonRpcQueue $queue */

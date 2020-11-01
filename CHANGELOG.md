@@ -1,4 +1,6 @@
 ## 6.0.0 (Unreleased)
+* Implement support for progress reporting using `$/progress`.
+* Remove `serenata/serenata/didProgressIndexing` since `$/progress` is the official way of reporting progress.
 * Update dependencies to latest versions (Symfony 5, PHPUnit 9, Paratest 5, ...).
 * Experimental nightly (CI) PHAR builds for running Serenata on PHP 8 are now provided.
     * Running tests with paratest already profits from a noticeable speed-up with the official Docker RC images (went down from ~11 seconds to ~3 seconds, on a CPU with 16 threads).
