@@ -262,7 +262,7 @@ parameters:
 
 		-
 			message: "#^Missing @throws Exception annotation$#"
-			count: 9
+			count: 10
 			path: src/UserInterface/JsonRpcApplication.php
 
 		-

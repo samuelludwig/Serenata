@@ -2,6 +2,8 @@
 
 namespace Serenata\Indexing;
 
+use React\Promise\ExtendedPromiseInterface;
+
 use Serenata\Sockets\JsonRpcMessageSenderInterface;
 
 /**
@@ -14,11 +16,11 @@ interface IndexerInterface
      * @param bool                           $useLatestState
      * @param JsonRpcMessageSenderInterface $jsonRpcMessageSender
      *
-     * @return bool
+     * @return ExtendedPromiseInterface ExtendedPromiseInterface<bool>
      */
     public function index(
         string $uri,
         bool $useLatestState,
         JsonRpcMessageSenderInterface $jsonRpcMessageSender
-    ): bool;
+    ): ExtendedPromiseInterface;
 }

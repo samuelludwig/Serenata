@@ -4,6 +4,7 @@ namespace Serenata\UserInterface;
 
 use React;
 use Closure;
+use DomainException;
 use RuntimeException;
 use UnexpectedValueException;
 
@@ -13,7 +14,9 @@ use React\EventLoop\TimerInterface;
 use Serenata\Sockets\JsonRpcQueue;
 use Serenata\Sockets\SocketServer;
 use Serenata\Sockets\JsonRpcRequest;
+use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
+use Serenata\Sockets\JsonRpcRequestSender;
 use Serenata\Sockets\JsonRpcMessageInterface;
 use Serenata\Sockets\JsonRpcQueueItemProcessor;
 use Serenata\Sockets\JsonRpcMessageHandlerInterface;
@@ -71,15 +74,22 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcMes
      */
     public function handle(JsonRpcMessageInterface $message, JsonRpcMessageSenderInterface $jsonRpcMessageSender): void
     {
-        if (!$message instanceof JsonRpcRequest) {
-            return; // We currently don't know how to handle responses from the client to requests we sent.
+        if ($message instanceof JsonRpcRequest) {
+            /** @var JsonRpcQueue $queue */
+            $queue = $this->getContainer()->get(JsonRpcQueue::class);
+            $queue->push(new JsonRpcQueueItem($message, $jsonRpcMessageSender));
+
+            $this->ensurePeriodicQueueProcessingTimerIsInstalled();
+        } elseif ($message instanceof JsonRpcResponse) {
+            /** @var JsonRpcRequestSender $requestSender */
+            $requestSender = $this->getContainer()->get(JsonRpcRequestSender::class);
+            $requestSender->handleResponse($message);
+        } else {
+            throw new DomainException(
+                'Received JSON-RPC message that is neither a request nor a response, but a "' . get_class($message) .
+                '" instead, which is not supportedl'
+            );
         }
-
-        /** @var JsonRpcQueue $queue */
-        $queue = $this->getContainer()->get(JsonRpcQueue::class);
-        $queue->push(new JsonRpcQueueItem($message, $jsonRpcMessageSender));
-
-        $this->ensurePeriodicQueueProcessingTimerIsInstalled();
     }
 
     /**

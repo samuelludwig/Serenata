@@ -2,6 +2,8 @@
 
 namespace Serenata\Indexing;
 
+use React\Promise\ExtendedPromiseInterface;
+
 use Serenata\Utility\TextDocumentItem;
 
 /**
@@ -34,10 +36,16 @@ final class TextDocumentContentRegistryUpdatingIndexer implements FileIndexerInt
     /**
      * @inheritDoc
      */
-    public function index(TextDocumentItem $textDocumentItem): void
+    public function index(TextDocumentItem $textDocumentItem): ExtendedPromiseInterface
     {
-        $this->delegate->index($textDocumentItem);
+        $promise = $this->delegate->index($textDocumentItem)->then(function ($value) use ($textDocumentItem) {
+            $this->textDocumentContentRegistry->update($textDocumentItem->getUri(), $textDocumentItem->getText());
 
-        $this->textDocumentContentRegistry->update($textDocumentItem->getUri(), $textDocumentItem->getText());
+            return $value;
+        });
+
+        assert($promise instanceof ExtendedPromiseInterface);
+
+        return $promise;
     }
 }

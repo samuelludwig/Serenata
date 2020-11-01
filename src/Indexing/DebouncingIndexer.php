@@ -5,6 +5,9 @@ namespace Serenata\Indexing;
 use React\EventLoop\LoopInterface;
 use React\EventLoop\TimerInterface;
 
+use React\Promise\Deferred;
+use React\Promise\ExtendedPromiseInterface;
+
 use Serenata\Sockets\JsonRpcMessageSenderInterface;
 
 /**
@@ -54,20 +57,32 @@ final class DebouncingIndexer implements IndexerInterface
     /**
      * @inheritDoc
      */
-    public function index(string $uri, bool $useLatestState, JsonRpcMessageSenderInterface $jsonRpcMessageSender): bool
-    {
+    public function index(
+        string $uri,
+        bool $useLatestState,
+        JsonRpcMessageSenderInterface $jsonRpcMessageSender
+    ): ExtendedPromiseInterface {
         if (isset($this->uriTimerMap[$uri])) {
             $this->eventLoop->cancelTimer($this->uriTimerMap[$uri]);
         }
 
-        $callback = function (/*TimerInterface $timer*/) use ($uri, $useLatestState, $jsonRpcMessageSender): void {
-            $this->delegate->index($uri, $useLatestState, $jsonRpcMessageSender);
+        $deferred = new Deferred();
+
+        $callback = function (/*TimerInterface $timer*/) use ($uri, $useLatestState, $jsonRpcMessageSender, $deferred): void {
+            $this->delegate->index($uri, $useLatestState, $jsonRpcMessageSender)->then(
+                function (bool $response) use ($deferred): void {
+                    $deferred->resolve(true);
+                },
+                function ($reason = null) use ($deferred): void {
+                    $deferred->reject($reason);
+                }
+            );
 
             unset($this->uriTimerMap[$uri]);
         };
 
         $this->uriTimerMap[$uri] = $this->eventLoop->addTimer(self::INDEXING_DELAY_SECONDS, $callback);
 
-        return true;
+        return $deferred->promise();
     }
 }

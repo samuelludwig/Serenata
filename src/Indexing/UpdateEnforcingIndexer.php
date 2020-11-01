@@ -2,6 +2,8 @@
 
 namespace Serenata\Indexing;
 
+use React\Promise\ExtendedPromiseInterface;
+
 use Serenata\Utility\TextDocumentItem;
 
 /**
@@ -33,7 +35,7 @@ final class UpdateEnforcingIndexer implements FileIndexerInterface
     /**
      * @inheritDoc
      */
-    public function index(TextDocumentItem $textDocumentItem): void
+    public function index(TextDocumentItem $textDocumentItem): ExtendedPromiseInterface
     {
         $file = null;
 
@@ -43,6 +45,6 @@ final class UpdateEnforcingIndexer implements FileIndexerInterface
             throw new IndexingFailedException('Skipping creation of new file during indexing', 0, $e);
         }
 
-        $this->delegate->index($textDocumentItem);
+        return $this->delegate->index($textDocumentItem);
     }
 }

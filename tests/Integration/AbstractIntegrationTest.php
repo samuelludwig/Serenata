@@ -181,15 +181,17 @@ abstract class AbstractIntegrationTest extends TestCase
             $this->container->get('textDocumentContentRegistry')->clear($normalized);
         }
 
-        $success = $indexer->index($uri, true, $this->mockJsonRpcMessageSenderInterface());
-
-        if (!$mayFail) {
-            self::assertTrue(
-                $success,
-                'Indexing "' . $uri . '" should have worked, but it failed for an unknown reason instead. Does it ' .
-                'perhaps contain syntax errors that cause parsing to fail?'
-            );
-        }
+        $successPromise = $indexer->index($uri, true, $this->mockJsonRpcMessageSenderInterface())->then(
+            function (bool $success) use ($uri, $mayFail): void {
+                if (!$mayFail) {
+                    self::assertTrue(
+                        $success,
+                        'Indexing "' . $uri . '" should have worked, but it failed for an unknown reason instead. Does it ' .
+                        'perhaps contain syntax errors that cause parsing to fail?'
+                    );
+                }
+            }
+        );
 
         $this->processOpenQueueItems();
     }

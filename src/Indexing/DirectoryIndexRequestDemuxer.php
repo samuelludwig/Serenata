@@ -4,6 +4,9 @@ namespace Serenata\Indexing;
 
 use SplFileInfo;
 
+use React\Promise\Deferred;
+use React\Promise\ExtendedPromiseInterface;
+
 use Serenata\Sockets\JsonRpcQueue;
 use Serenata\Sockets\JsonRpcRequest;
 use Serenata\Sockets\JsonRpcQueueItem;
@@ -54,7 +57,7 @@ final class DirectoryIndexRequestDemuxer
         array $extensionsToIndex,
         array $globsToExclude,
         JsonRpcMessageSenderInterface $jsonRpcMessageSender
-    ): void {
+    ): ExtendedPromiseInterface {
         $iterator = $this->directoryIndexableFileIteratorFactory->create($uri, $extensionsToIndex, $globsToExclude);
 
         // Convert to array early so we don't walk through the iterators (and perform disk access) twice.
@@ -86,6 +89,11 @@ final class DirectoryIndexRequestDemuxer
         }
 
         $this->queueWorkDoneProgressEndNotification($token, $uri, $jsonRpcMessageSender);
+
+        $deferred = new Deferred();
+        $deferred->resolve(null);
+
+        return $deferred->promise();
     }
 
     /**

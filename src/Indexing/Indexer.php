@@ -7,6 +7,9 @@ use UnexpectedValueException;
 use Evenement\EventEmitterTrait;
 use Evenement\EventEmitterInterface;
 
+use React\Promise\Deferred;
+use React\Promise\ExtendedPromiseInterface;
+
 use Serenata\Indexing\TextDocumentContentRegistry;
 
 use Serenata\Sockets\JsonRpcMessageSenderInterface;
@@ -80,8 +83,11 @@ final class Indexer implements IndexerInterface, EventEmitterInterface
     /**
      * @inheritDoc
      */
-    public function index(string $uri, bool $useLatestState, JsonRpcMessageSenderInterface $jsonRpcMessageSender): bool
-    {
+    public function index(
+        string $uri,
+        bool $useLatestState,
+        JsonRpcMessageSenderInterface $jsonRpcMessageSender
+    ): ExtendedPromiseInterface {
         $workspace = $this->activeWorkspaceManager->getActiveWorkspace();
 
         if ($workspace === null) {
@@ -102,14 +108,12 @@ final class Indexer implements IndexerInterface, EventEmitterInterface
             );
         }
 
-        $this->indexDirectory(
+        return $this->indexDirectory(
             $uri,
             $workspace->getConfiguration()->getFileExtensions(),
             $workspace->getConfiguration()->getExcludedPathExpressions(),
             $jsonRpcMessageSender
         );
-
-        return true;
     }
 
     /**
@@ -117,14 +121,16 @@ final class Indexer implements IndexerInterface, EventEmitterInterface
      * @param string[]                       $extensionsToIndex
      * @param string[]                       $globsToExclude
      * @param JsonRpcMessageSenderInterface $jsonRpcMessageSender
+     *
+     * @return ExtendedPromiseInterface ExtendedPromiseInterface<null>
      */
     private function indexDirectory(
         string $uri,
         array $extensionsToIndex,
         array $globsToExclude,
         JsonRpcMessageSenderInterface $jsonRpcMessageSender
-    ): void {
-        $this->directoryIndexRequestDemuxer->index(
+    ): ExtendedPromiseInterface {
+        return $this->directoryIndexRequestDemuxer->index(
             $uri,
             $extensionsToIndex,
             $globsToExclude,
@@ -138,35 +144,49 @@ final class Indexer implements IndexerInterface, EventEmitterInterface
      * @param string[] $globsToExclude
      * @param bool     $useLatestState
      *
-     * @return bool
+     * @return ExtendedPromiseInterface ExtendedPromiseInterface<bool>
      */
     private function indexFile(
         string $uri,
         array $extensionsToIndex,
         array $globsToExclude,
         bool $useLatestState
-    ): bool {
+    ): ExtendedPromiseInterface {
         if (!$this->isFileAllowed($uri, $extensionsToIndex, $globsToExclude)) {
-            return false;
+            $deferred = new Deferred();
+            $deferred->resolve(false);
+
+            return $deferred->promise();
         } elseif ($useLatestState) {
             $code = $this->textDocumentContentRegistry->get($uri);
         } else {
             try {
                 $code = $this->sourceCodeStreamReader->getSourceCodeFromFile($uri);
             } catch (UnexpectedValueException $e) {
-                return false; // Skip files that we can't read.
+                // Skip files that we can't read.
+                $deferred = new Deferred();
+                $deferred->resolve(false);
+
+                return $deferred->promise();
             }
         }
 
         try {
-            $this->fileIndexer->index(new TextDocumentItem($uri, $code));
+            $promise = $this->fileIndexer->index(new TextDocumentItem($uri, $code))->then(function (): bool {
+                $this->emit(IndexingEventName::INDEXING_SUCCEEDED_EVENT);
+
+                return true;
+            });
+
+            assert($promise instanceof ExtendedPromiseInterface);
+
+            return $promise;
         } catch (IndexingFailedException $e) {
-            return false;
+            $deferred = new Deferred();
+            $deferred->resolve(false);
+
+            return $deferred->promise();
         }
-
-        $this->emit(IndexingEventName::INDEXING_SUCCEEDED_EVENT);
-
-        return true;
     }
 
     /**

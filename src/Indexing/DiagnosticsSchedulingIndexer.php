@@ -2,6 +2,8 @@
 
 namespace Serenata\Indexing;
 
+use React\Promise\ExtendedPromiseInterface;
+
 use Serenata\Sockets\JsonRpcQueue;
 use Serenata\Sockets\JsonRpcRequest;
 use Serenata\Sockets\JsonRpcQueueItem;
@@ -35,20 +37,29 @@ final class DiagnosticsSchedulingIndexer implements IndexerInterface
     /**
      * @inheritDoc
      */
-    public function index(string $uri, bool $useLatestState, JsonRpcMessageSenderInterface $jsonRpcMessageSender): bool
-    {
-        $response = $this->delegate->index($uri, $useLatestState, $jsonRpcMessageSender);
+    public function index(
+        string $uri,
+        bool $useLatestState,
+        JsonRpcMessageSenderInterface $jsonRpcMessageSender
+    ): ExtendedPromiseInterface {
+        $promise = $this->delegate->index($uri, $useLatestState, $jsonRpcMessageSender)->then(
+            function (bool $response) use ($uri, $jsonRpcMessageSender): bool {
+                if (!$response || !is_file($uri)) {
+                    return $response;
+                }
 
-        if (!$response || !is_file($uri)) {
-            return $response;
-        }
+                $request = new JsonRpcRequest(null, 'serenata/internal/diagnostics', [
+                    'uri'  => $uri,
+                ]);
 
-        $request = new JsonRpcRequest(null, 'serenata/internal/diagnostics', [
-            'uri'  => $uri,
-        ]);
+                $this->queue->push(new JsonRpcQueueItem($request, $jsonRpcMessageSender));
 
-        $this->queue->push(new JsonRpcQueueItem($request, $jsonRpcMessageSender));
+                return true;
+            }
+        );
 
-        return true;
+        assert($promise instanceof ExtendedPromiseInterface);
+
+        return $promise;
     }
 }

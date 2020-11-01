@@ -13,6 +13,9 @@ use PhpParser\NodeVisitor;
 use PhpParser\ErrorHandler;
 use PhpParser\NodeTraverser;
 
+use React\Promise\Deferred;
+use React\Promise\ExtendedPromiseInterface;
+
 use Serenata\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
 use Serenata\Analysis\Typing\TypeAnalyzer;
@@ -104,7 +107,7 @@ final class StorageFileIndexer implements FileIndexerInterface
     /**
      * @inheritDoc
      */
-    public function index(TextDocumentItem $textDocumentItem): void
+    public function index(TextDocumentItem $textDocumentItem): ExtendedPromiseInterface
     {
         $this->storage->beginTransaction();
 
@@ -143,6 +146,11 @@ final class StorageFileIndexer implements FileIndexerInterface
                 $e
             );
         }
+
+        $deferred = new Deferred();
+        $deferred->resolve(null);
+
+        return $deferred->promise();
     }
 
     /**

@@ -2,15 +2,17 @@
 
 namespace Serenata\UserInterface\JsonRpcQueueItemHandler;
 
+use React\Promise;
+
 use React\Promise\Deferred;
 use React\Promise\ExtendedPromiseInterface;
 
 use UnexpectedValueException;
 
-use Serenata\Indexing\Indexer;
 use Serenata\Indexing\IndexFilePruner;
 use Serenata\Indexing\ManagerRegistry;
 use Serenata\Indexing\PathNormalizer;
+use Serenata\Indexing\IndexerInterface;
 use Serenata\Indexing\SchemaInitializer;
 use Serenata\Indexing\StorageVersionChecker;
 
@@ -61,7 +63,7 @@ final class InitializeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
     private $storageVersionChecker;
 
     /**
-     * @var Indexer
+     * @var IndexerInterface
      */
     private $indexer;
 
@@ -90,7 +92,7 @@ final class InitializeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
      * @param WorkspaceConfigurationParserInterface $workspaceConfigurationParser
      * @param ManagerRegistry                       $managerRegistry
      * @param StorageVersionChecker                 $storageVersionChecker
-     * @param Indexer                               $indexer
+     * @param IndexerInterface                      $indexer
      * @param SchemaInitializer                     $schemaInitializer
      * @param IndexFilePruner                       $indexFilePruner
      * @param MessageLogger                         $messageLogger
@@ -100,7 +102,7 @@ final class InitializeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
         WorkspaceConfigurationParserInterface $workspaceConfigurationParser,
         ManagerRegistry $managerRegistry,
         StorageVersionChecker $storageVersionChecker,
-        Indexer $indexer,
+        IndexerInterface $indexer,
         SchemaInitializer $schemaInitializer,
         IndexFilePruner $indexFilePruner,
         MessageLogger $messageLogger,
@@ -220,67 +222,79 @@ final class InitializeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
 
         $this->indexFilePruner->prune();
 
+        $indexingPromise = null;
+
         if ($initializeIndexForProject) {
             $urisToIndex = $workspaceConfiguration->getUris();
             $urisToIndex[] = $this->getStubsUri();
 
+            $promises = [];
+
             foreach ($urisToIndex as $uri) {
-                $this->indexer->index($uri, false, $jsonRpcMessageSender);
+                $promises[] = $this->indexer->index($uri, false, $jsonRpcMessageSender);
             }
+
+            $indexingPromise = Promise\all($promises);
+        } else {
+            $deferredIndexing = new Deferred();
+            $deferredIndexing->resolve();
+
+            $indexingPromise = $deferredIndexing->promise();
         }
 
-        $response = new JsonRpcResponse(
-            $jsonRpcRequest->getId(),
-            new InitializeResult(
-                new ServerCapabilities(
-                    new TextDocumentSyncOptions(
+        $promise = $indexingPromise->then(function () use ($jsonRpcRequest): JsonRpcResponse {
+            return new JsonRpcResponse(
+                $jsonRpcRequest->getId(),
+                new InitializeResult(
+                    new ServerCapabilities(
+                        new TextDocumentSyncOptions(
+                            false,
+                            1,
+                            false,
+                            false,
+                            new SaveOptions(true)
+                        ),
+                        true,
+                        // '>' should be '->' and ':' should be '::', but some clients such as VSCode do not support
+                        // multi-character triggers.
+                        new CompletionOptions(false, ['>', '$', ':']),
+                        new SignatureHelpOptions(['(', ',']),
+                        true,
                         false,
-                        1,
                         false,
-                        false,
-                        new SaveOptions(true)
-                    ),
-                    true,
-                    // '>' should be '->' and ':' should be '::', but some clients such as VSCode do not support
-                    // multi-character triggers.
-                    new CompletionOptions(false, ['>', '$', ':']),
-                    new SignatureHelpOptions(['(', ',']),
-                    true,
-                    false,
-                    false,
-                    [
-                        'workDoneProgress' => true,
-                    ],
-                    true,
-                    true,
-                    false,
-                    false,
-                    [
-                        'resolveProvider' => true,
-                    ],
-                    false,
-                    false,
-                    null,
-                    false,
-                    null,
-                    false,
-                    false,
-                    null,
-                    [
-                        'workspaceFolders' => [
-                            'supported'           => false,
-                            'changeNotifications' => false,
+                        [
+                            'workDoneProgress' => true,
                         ],
-                    ],
-                    null
+                        true,
+                        true,
+                        false,
+                        false,
+                        [
+                            'resolveProvider' => true,
+                        ],
+                        false,
+                        false,
+                        null,
+                        false,
+                        null,
+                        false,
+                        false,
+                        null,
+                        [
+                            'workspaceFolders' => [
+                                'supported'           => false,
+                                'changeNotifications' => false,
+                            ],
+                        ],
+                        null
+                    )
                 )
-            )
-        );
+            );
+        });
 
-        $deferred = new Deferred();
-        $deferred->resolve($response);
+        assert($promise instanceof ExtendedPromiseInterface);
 
-        return $deferred->promise();
+        return $promise;
     }
 
     /**

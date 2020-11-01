@@ -2,7 +2,6 @@
 
 namespace Serenata\UserInterface\JsonRpcQueueItemHandler;
 
-use React\Promise\Deferred;
 use React\Promise\ExtendedPromiseInterface;
 
 use Serenata\Indexing\IndexerInterface;
@@ -55,22 +54,32 @@ final class DidSaveJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHandl
             throw new InvalidArgumentsException('Missing parameters for didChangeWatchedFiles request');
         }
 
-        $this->handle($parameters['textDocument']['uri'], $parameters['text'], $queueItem->getJsonRpcMessageSender());
+        $promise = $this->handle(
+            $parameters['textDocument']['uri'],
+            $parameters['text'],
+            $queueItem->getJsonRpcMessageSender()
+        )->then(function () {
+            // This is a notification that doesn't expect a response.
+            return null;
+        });
 
-        // This is a notification that doesn't expect a response.
-        $deferred = new Deferred();
-        $deferred->resolve(null);
+        assert($promise instanceof ExtendedPromiseInterface);
 
-        return $deferred->promise();
+        return $promise;
     }
 
     /**
      * @param string                        $uri
      * @param string|null                   $contents
      * @param JsonRpcMessageSenderInterface $sender
+     *
+     * @return ExtendedPromiseInterface ExtendedPromiseInterface<bool>
      */
-    public function handle(string $uri, ?string $contents, JsonRpcMessageSenderInterface $sender): void
-    {
+    public function handle(
+        string $uri,
+        ?string $contents,
+        JsonRpcMessageSenderInterface $sender
+    ): ExtendedPromiseInterface {
         if ($contents !== null) {
             $this->textDocumentContentRegistry->update($uri, $contents);
         } else {
@@ -78,6 +87,6 @@ final class DidSaveJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHandl
             $this->textDocumentContentRegistry->clear($uri);
         }
 
-        $this->indexer->index($uri, true, $sender);
+        return $this->indexer->index($uri, true, $sender);
     }
 }

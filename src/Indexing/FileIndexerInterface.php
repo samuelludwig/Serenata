@@ -2,6 +2,8 @@
 
 namespace Serenata\Indexing;
 
+use React\Promise\ExtendedPromiseInterface;
+
 use Serenata\Utility\TextDocumentItem;
 
 /**
@@ -22,7 +24,7 @@ interface FileIndexerInterface
      *
      * @throws IndexingFailedException
      *
-     * @return void
+     * @return ExtendedPromiseInterface ExtendedPromiseInterface<null>
      */
-    public function index(TextDocumentItem $textDocumentItem): void;
+    public function index(TextDocumentItem $textDocumentItem): ExtendedPromiseInterface;
 }
