@@ -82,14 +82,6 @@ final class DirectoryIndexRequestDemuxer
                 $jsonRpcMessageSender
             );
 
-            // $this->queueProgressRequest(
-            //     $uri,
-            //     $folderUri,
-            //     $i,
-            //     $totalItems,
-            //     $jsonRpcMessageSender
-            // );
-
             ++$i;
         }
 
