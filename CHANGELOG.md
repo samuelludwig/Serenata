@@ -7,7 +7,7 @@
 * Fix parsing qualified names used in static class member access not working properly on PHP 8.
 * Support for _running_ on PHP 7.1 and 7.2 has been removed as they were previously deprecated and are [end of life](https://www.php.net/supported-versions.php).
 * _Running_ Serenata _on_ PHP 7.3 is now deprecated
-    * PHP 7.3 [no longer receives active support when PHP 8 is released](https://www.php.net/supported-versions.php).
+    * PHP 7.3 [no longer receives active support](https://www.php.net/supported-versions.php).
     * Support will be removed no earlier than the next major release.
     * Support for PHP 7 will still be around for a while in the form of 7.4.
     * Analyzed code can still be anything from PHP 5.2 all the way up to 8.0.
