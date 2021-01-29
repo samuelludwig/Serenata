@@ -1,11 +1,9 @@
 ## 6.0.0 (Unreleased)
+* Serenata should now run properly on PHP 8.
 * Implement support for progress reporting using `$/progress`.
 * Remove `serenata/serenata/didProgressIndexing` since `$/progress` is the official way of reporting progress.
-* Update dependencies to latest versions (Symfony 5, PHPUnit 9, Paratest 5, ...).
-* Experimental nightly (CI) PHAR builds for running Serenata on PHP 8 are now provided.
-    * Running tests with paratest already profits from a noticeable speed-up with the official Docker RC images (went down from ~11 seconds to ~3 seconds, on a CPU with 16 threads).
-* Fix parsing qualified names used in static class member access not working properly on PHP 8.
-* Support for _running_ on PHP 7.1 and 7.2 has been removed as they were previously deprecated and are [end of life](https://www.php.net/supported-versions.php).
+* Update dependencies to latest versions (Symfony 5, PHPUnit 9, Paratest 6, ...).
+* Support for _running_ on PHP 7.1 and 7.2 was removed as they were previously deprecated and are [end of life](https://www.php.net/supported-versions.php).
 * _Running_ Serenata _on_ PHP 7.3 and PHP 7.4 are now deprecated (but not removed yet)
     * PHP 7.3 [no longer receives active support](https://www.php.net/supported-versions.php) and PHP 7.4 will likely also have ceased by the time this major version is released. Support for PHP 7.3 will be removed no earlier than the next major release, meaning Serenata 7.0 will focus on PHP 8 entirely.
     * Analyzed code can still be anything from PHP 5.2 all the way up to 8.0.
