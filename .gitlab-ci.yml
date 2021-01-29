@@ -16,11 +16,6 @@ include:
         - curl -sSL https://getcomposer.org/download/2.0.1/composer.phar --output composer.phar
         - echo "4b4b118cc54662e4813ba86efb215fdb19c5b29944c5919b4f2803c915aa2234  composer.phar" > checksums
         - sha256sum -c checksums
-
-        # NOTE: Ignoring platform requirements is currently required for PHP 8 to work because the following
-        # dependencies don't allow PHP 8 yet in their requirements, but do work with it:
-        #   - pepakriz/phpstan-exception-rules
-        #   - doctrine/orm
         - php composer.phar update --prefer-dist --optimize-autoloader --no-interaction --no-progress
 
 .build-job-shared: &build-job-shared
