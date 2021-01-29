@@ -36,7 +36,7 @@
         "symfony/yaml": "^5.1"
     },
     "require-dev": {
-        "brianium/paratest": "^5.0",
+        "brianium/paratest": "^6.2",
         "pepakriz/phpstan-exception-rules": "^0.10.1",
         "phpstan/phpstan": "^0.12",
         "phpstan/phpstan-doctrine": "^0.12",
