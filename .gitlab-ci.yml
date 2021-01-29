@@ -69,8 +69,7 @@ test:run-phpcs:
           artifacts: true
 
 test:run-phpstan:
-    # Warning: PHPStan may generate different errors when running on PHP 8!
-    image: php:7.4-cli-alpine
+    image: php:8.0-cli-alpine
     stage: test
     script:
         - php -d memory_limit=2048M vendor/bin/phpstan analyse -c phpstan-ci.neon --no-interaction --no-progress --error-format junit > ./phpstan-report.xml
