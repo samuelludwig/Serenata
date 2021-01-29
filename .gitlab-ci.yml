@@ -45,7 +45,7 @@ build:php-7.4:
     <<: *build-job-shared
 
 build:php-8.0:
-    image: php:8.0.0RC2-cli-alpine
+    image: php:8.0-cli-alpine
     <<: *build-job-shared
 
 # ----- Test stage
@@ -59,7 +59,7 @@ test:run-composer-require-checker:
         - php ./composer-require-checker.phar check ./composer.json
 
 test:run-phpcs:
-    image: php:8.0.0RC2-cli-alpine
+    image: php:8.0-cli-alpine
     stage: test
     script:
         - php vendor/bin/phpcs src tests --warning-severity=8 --report-junit=./phpcs-test-report.xml
@@ -117,7 +117,7 @@ test:php-7.4:
           artifacts: true
 
 test:php-8.0:
-    image: php:8.0.0RC2-cli-alpine
+    image: php:8.0-cli-alpine
     <<: *test-job-shared
     needs:
         - job: build:php-8.0
@@ -156,11 +156,11 @@ finalization:package-php-7.4:
     <<: *finalization-package-job-shared
 
 finalization:package-php-8.0:
-    image: php:8.0.0RC2-cli-alpine
+    image: php:8.0-cli-alpine
     <<: *finalization-package-job-shared
 
 finalization:code-coverage:
-    image: php:8.0.0RC2-cli-alpine
+    image: php:8.0-cli-alpine
     stage: finalization
     coverage: '/^\s*Lines:\s*\d+.\d+\%/'
     script:
