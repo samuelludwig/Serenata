@@ -19,7 +19,6 @@ parameters:
         reportUnusedCatchesOfUncheckedExceptions: false
         reportUnusedCheckedThrowsInSubtypes: true
         reportCheckedThrowsInGlobalScope: true
-        ignoreDescriptiveUncheckedExceptions: false
         uncheckedExceptions:
             - RuntimeException
             - LogicException

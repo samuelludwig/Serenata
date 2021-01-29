@@ -11,24 +11,9 @@ parameters:
 			path: src/Analysis/DocblockPositionalNameResolver.php
 
 		-
-			message: "#^Unused @throws UnexpectedValueException annotation$#"
-			count: 1
-			path: src/Analysis/NodeAtOffsetLocator.php
-
-		-
 			message: "#^Unused @throws Serenata\\\\Analysis\\\\SourceCodeReading\\\\FileSourceCodeReaderException annotation$#"
 			count: 1
 			path: src/Analysis/SourceCodeReading/FileSourceCodeStreamReader.php
-
-		-
-			message: "#^Unused @throws Serenata\\\\NameQualificationUtilities\\\\Exception\\\\MalformedNameEncounteredException annotation$#"
-			count: 1
-			path: src/Analysis/SpecialNameIgnoringPositionalNameResolver.php
-
-		-
-			message: "#^Unused @throws Serenata\\\\NameQualificationUtilities\\\\Exception\\\\UnresolvableNameEncounteredException annotation$#"
-			count: 1
-			path: src/Analysis/SpecialNameIgnoringPositionalNameResolver.php
 
 		-
 			message: "#^Missing @throws Serenata\\\\Analysis\\\\Typing\\\\Deduction\\\\TypeDeductionException annotation$#"
@@ -46,29 +31,9 @@ parameters:
 			path: src/Analysis/Typing/Deduction/NameNodeTypeDeducer.php
 
 		-
-			message: "#^Unused @throws DomainException annotation$#"
-			count: 2
-			path: src/Analysis/Typing/Deduction/NodeTypeDeducer.php
-
-		-
 			message: "#^Parameter \\#1 \\$keys of function array_combine expects array\\<int\\|string\\>, array\\<string\\|null\\> given\\.$#"
 			count: 1
 			path: src/Analysis/Typing/Deduction/PropertyFetchNodeTypeDeducer.php
-
-		-
-			message: "#^Unused @throws PhpParser\\\\Error annotation$#"
-			count: 1
-			path: src/Analysis/VariableScanner.php
-
-		-
-			message: "#^Unused @throws DomainException annotation$#"
-			count: 1
-			path: src/Analysis/Visiting/TypeQueryingVisitor.php
-
-		-
-			message: "#^Unused @throws UnexpectedValueException annotation$#"
-			count: 1
-			path: src/Autocompletion/Providers/LocalVariableAutocompletionProvider.php
 
 		-
 			message: "#^Missing @throws Serenata\\\\Analysis\\\\ClasslikeBuildingFailedException annotation$#"
@@ -76,23 +41,13 @@ parameters:
 			path: src/CodeLenses/CodeLensesRetriever.php
 
 		-
-			message: "#^Unused @throws Serenata\\\\Commands\\\\BadCommandArgumentsException annotation$#"
-			count: 7
-			path: src/Commands/CommandFactory.php
-
-		-
-			message: "#^Unused @throws PhpParser\\\\Error annotation$#"
-			count: 1
-			path: src/Highlights/DocumentHighlightsRetriever.php
-
-		-
-			message: "#^Missing @throws ArithmeticError annotation$#"
+			message: "#^Missing @throws DivisionByZeroError annotation$#"
 			count: 1
 			path: src/Indexing/DirectoryIndexRequestDemuxer.php
 
 		-
 			message: "#^Unused @throws Serenata\\\\Indexing\\\\StorageException annotation$#"
-			count: 9
+			count: 8
 			path: src/Indexing/DoctrineStorage.php
 
 		-
@@ -104,11 +59,6 @@ parameters:
 			message: "#^Missing @throws Throwable annotation$#"
 			count: 10
 			path: src/Indexing/DoctrineStorage.php
-
-		-
-			message: "#^Unused @throws Serenata\\\\Indexing\\\\StorageException annotation$#"
-			count: 9
-			path: src/Indexing/EventEmittingStorage.php
 
 		-
 			message: "#^Missing @throws Serenata\\\\Analysis\\\\SourceCodeReading\\\\FileSourceCodeReaderException annotation$#"
@@ -131,22 +81,7 @@ parameters:
 			path: src/Indexing/SqliteConnectionFactory.php
 
 		-
-			message: "#^Unused @throws Serenata\\\\Indexing\\\\IndexingFailedException annotation$#"
-			count: 1
-			path: src/Indexing/StorageFileIndexer.php
-
-		-
 			message: "#^Catching checked exception Exception as unchecked PhpParser\\\\Error is not supported properly in this moment\\. Eliminate checked exceptions by custom catch statement\\.$#"
-			count: 2
-			path: src/Indexing/StorageFileIndexer.php
-
-		-
-			message: "#^Unused @throws PhpParser\\\\Error annotation$#"
-			count: 1
-			path: src/Indexing/StorageFileIndexer.php
-
-		-
-			message: "#^Exception is never thrown in the corresponding try block$#"
 			count: 2
 			path: src/Indexing/StorageFileIndexer.php
 
@@ -166,21 +101,6 @@ parameters:
 			path: src/Indexing/TextDocumentContentRegistry.php
 
 		-
-			message: "#^Unused @throws Serenata\\\\Indexing\\\\IndexingFailedException annotation$#"
-			count: 1
-			path: src/Indexing/TextDocumentContentRegistryUpdatingIndexer.php
-
-		-
-			message: "#^Unused @throws Serenata\\\\Indexing\\\\IndexingFailedException annotation$#"
-			count: 1
-			path: src/Indexing/UnmodifiedFileSkippingIndexer.php
-
-		-
-			message: "#^Unused @throws Serenata\\\\Indexing\\\\IndexingFailedException annotation$#"
-			count: 1
-			path: src/Indexing/UpdateEnforcingIndexer.php
-
-		-
 			message: "#^Missing @throws Serenata\\\\Analysis\\\\Typing\\\\Deduction\\\\TypeDeductionException annotation$#"
 			count: 3
 			path: src/Indexing/Visiting/ClasslikeIndexingVisitor.php
@@ -194,11 +114,6 @@ parameters:
 			message: "#^Missing @throws Serenata\\\\Analysis\\\\Typing\\\\Deduction\\\\TypeDeductionException annotation$#"
 			count: 1
 			path: src/Indexing/Visiting/FunctionIndexingVisitor.php
-
-		-
-			message: "#^Unused @throws UnexpectedValueException annotation$#"
-			count: 3
-			path: src/Indexing/Visiting/MetaStaticMethodTypeIndexingVisitor.php
 
 		-
 			message: "#^Parameter \\#1 \\$node of method Serenata\\\\Indexing\\\\Visiting\\\\MetaStaticMethodTypeIndexingVisitor\\:\\:enterStaticMethodTypesElementNode\\(\\) expects PhpParser\\\\Node\\\\Expr\\\\ArrayItem, PhpParser\\\\Node\\\\Expr\\\\ArrayItem\\|null given\\.$#"
@@ -219,16 +134,6 @@ parameters:
 			message: "#^PHPStan\\\\PhpDocParser\\\\Parser\\\\ParserException is never thrown in the corresponding try block$#"
 			count: 1
 			path: src/Parsing/PhpstanDocblockTypeParser.php
-
-		-
-			message: "#^Unused @throws UnexpectedValueException annotation$#"
-			count: 1
-			path: src/SignatureHelp/SignatureHelpRetriever.php
-
-		-
-			message: "#^Unused @throws Serenata\\\\Sockets\\\\RequestParsingException annotation$#"
-			count: 2
-			path: src/Sockets/JsonRpcConnectionHandler.php
 
 		-
 			message: "#^Unused @throws UnderflowException annotation$#"
@@ -268,11 +173,6 @@ parameters:
 		-
 			message: "#^Missing @throws Exception annotation$#"
 			count: 10
-			path: src/UserInterface/JsonRpcApplication.php
-
-		-
-			message: "#^Unused @throws RuntimeException annotation$#"
-			count: 1
 			path: src/UserInterface/JsonRpcApplication.php
 
 		-
@@ -341,11 +241,6 @@ parameters:
 			path: src/UserInterface/JsonRpcQueueItemHandler/HoverJsonRpcQueueItemHandler.php
 
 		-
-			message: "#^Unused @throws Serenata\\\\UserInterface\\\\JsonRpcQueueItemHandler\\\\InvalidArgumentsException annotation$#"
-			count: 1
-			path: src/UserInterface/JsonRpcQueueItemHandler/InitializeJsonRpcQueueItemHandler.php
-
-		-
 			message: "#^Missing @throws Serenata\\\\Workspace\\\\Configuration\\\\Parsing\\\\WorkspaceConfigurationParsingException annotation$#"
 			count: 1
 			path: src/UserInterface/JsonRpcQueueItemHandler/InitializeJsonRpcQueueItemHandler.php
@@ -364,11 +259,6 @@ parameters:
 			message: "#^Unused @throws Throwable annotation$#"
 			count: 1
 			path: src/UserInterface/JsonRpcQueueItemHandler/ReferencesJsonRpcQueueItemHandler.php
-
-		-
-			message: "#^Unused @throws Serenata\\\\UserInterface\\\\JsonRpcQueueItemHandler\\\\InvalidArgumentsException annotation$#"
-			count: 1
-			path: src/UserInterface/JsonRpcQueueItemHandler/ResolveTypeJsonRpcQueueItemHandler.php
 
 		-
 			message: "#^Unused @throws Throwable annotation$#"
