@@ -6,10 +6,8 @@
     * Running tests with paratest already profits from a noticeable speed-up with the official Docker RC images (went down from ~11 seconds to ~3 seconds, on a CPU with 16 threads).
 * Fix parsing qualified names used in static class member access not working properly on PHP 8.
 * Support for _running_ on PHP 7.1 and 7.2 has been removed as they were previously deprecated and are [end of life](https://www.php.net/supported-versions.php).
-* _Running_ Serenata _on_ PHP 7.3 is now deprecated
-    * PHP 7.3 [no longer receives active support](https://www.php.net/supported-versions.php).
-    * Support will be removed no earlier than the next major release.
-    * Support for PHP 7 will still be around for a while in the form of 7.4.
+* _Running_ Serenata _on_ PHP 7.3 and PHP 7.4 are now deprecated (but not removed yet)
+    * PHP 7.3 [no longer receives active support](https://www.php.net/supported-versions.php) and PHP 7.4 will likely also have ceased by the time this major version is released. Support for PHP 7.3 will be removed no earlier than the next major release, meaning Serenata 7.0 will focus on PHP 8 entirely.
     * Analyzed code can still be anything from PHP 5.2 all the way up to 8.0.
 
 ## 5.4.0
