@@ -24,7 +24,7 @@ final class SocketServer
     private $server;
 
     /**
-     * @var SplObjectStorage
+     * @var SplObjectStorage<Connection,object>
      */
     private $connectionMap;
 
@@ -45,8 +45,11 @@ final class SocketServer
         LoopInterface $loop,
         ConnectionHandlerFactoryInterface $connectionHandlerFactory
     ) {
+        /** @var SplObjectStorage<Connection,object> $storage */
+        $storage = new SplObjectStorage();
+        $this->connectionMap = $storage;
+
         $this->server = new Server($uri, $loop);
-        $this->connectionMap = new SplObjectStorage();
         $this->connectionHandlerFactory = $connectionHandlerFactory;
 
         $this->server->on('connection', function (Connection $connection): void {

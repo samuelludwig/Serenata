@@ -51,6 +51,11 @@ parameters:
 			path: src/Analysis/Typing/Deduction/NodeTypeDeducer.php
 
 		-
+			message: "#^Parameter \\#1 \\$keys of function array_combine expects array\\<int\\|string\\>, array\\<string\\|null\\> given\\.$#"
+			count: 1
+			path: src/Analysis/Typing/Deduction/PropertyFetchNodeTypeDeducer.php
+
+		-
 			message: "#^Unused @throws PhpParser\\\\Error annotation$#"
 			count: 1
 			path: src/Analysis/VariableScanner.php

@@ -109,17 +109,17 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      * We could also flush the changes constantly, but this hurts performance and not fetching information we already
      * have benefits performance in large files with many interdependencies.
      *
-     * @var SplObjectStorage<Structures\Classlike>
+     * @var SplObjectStorage<Structures\Classlike,string>
      */
     private $classlikesFound;
 
     /**
-     * @var SplObjectStorage<Structures\Classlike>
+     * @var SplObjectStorage<Structures\Classlike,Node\Stmt\ClassLike>
      */
     private $relationsStorage;
 
     /**
-     * @var SplObjectStorage<Structures\Trait_>
+     * @var SplObjectStorage<Structures\Classlike,Node\Stmt\TraitUse[]>
      */
     private $traitUseStorage;
 
@@ -204,15 +204,15 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
     {
         $this->classlikeStack = new Stack();
 
-        /** @var SplObjectStorage<Structures\Classlike> $classlikesFound */
+        /** @var SplObjectStorage<Structures\Classlike,string> $classlikesFound */
         $classlikesFound = new SplObjectStorage();
         $this->classlikesFound = $classlikesFound;
 
-        /** @var SplObjectStorage<Structures\Classlike> $relationsStorage */
+        /** @var SplObjectStorage<Structures\Classlike,Node\Stmt\ClassLike> $relationsStorage */
         $relationsStorage = new SplObjectStorage();
         $this->relationsStorage = $relationsStorage;
 
-        /** @var SplObjectStorage<Structures\Trait_> $traitUseStorage */
+        /** @var SplObjectStorage<Structures\Classlike,Node\Stmt\TraitUse[]> $traitUseStorage */
         $traitUseStorage = new SplObjectStorage();
         $this->traitUseStorage = $traitUseStorage;
 
@@ -235,6 +235,8 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
         foreach ($this->relationsStorage as $classlike) {
             $node = $this->relationsStorage[$classlike];
 
+            assert($node !== null);
+
             $this->processClassLikeRelations($node, $classlike);
 
             $this->storage->persist($classlike);
@@ -242,6 +244,8 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
         foreach ($this->traitUseStorage as $classlike) {
             $nodes = $this->traitUseStorage[$classlike];
+
+            assert($nodes !== null);
 
             foreach ($nodes as $node) {
                 $this->processTraitUseNode($node, $classlike);

@@ -49,8 +49,6 @@ final class DoctrineStorage implements StorageInterface, MetadataProviderInterfa
             return $this->managerRegistry->getRepository(Structures\File::class)->findAll();
         } catch (Throwable $t) {
             $this->handleThrowable($t);
-
-            return []; // Only to make PHPStan happy as it does not detect that the above call never terminates.
         }
     }
 
@@ -63,8 +61,6 @@ final class DoctrineStorage implements StorageInterface, MetadataProviderInterfa
             return $this->managerRegistry->getRepository(Structures\AccessModifier::class)->findAll();
         } catch (Throwable $t) {
             $this->handleThrowable($t);
-
-            return []; // Only to make PHPStan happy as it does not detect that the above call never terminates.
         }
     }
 
@@ -79,8 +75,6 @@ final class DoctrineStorage implements StorageInterface, MetadataProviderInterfa
             ]);
         } catch (Throwable $t) {
             $this->handleThrowable($t);
-
-            return null; // Only to make PHPStan happy as it does not detect that the above call never terminates.
         }
     }
 
@@ -95,8 +89,6 @@ final class DoctrineStorage implements StorageInterface, MetadataProviderInterfa
             ]);
         } catch (Throwable $t) {
             $this->handleThrowable($t);
-
-            $file = null; // Only to make PHPStan happy as it does not detect that the above call never terminates.
         }
 
         if ($file === null) {
@@ -181,8 +173,6 @@ final class DoctrineStorage implements StorageInterface, MetadataProviderInterfa
             ]);
         } catch (Throwable $t) {
             $this->handleThrowable($t);
-
-            return []; // Only to make PHPStan happy as it does not detect that the above call never terminates.
         }
     }
 

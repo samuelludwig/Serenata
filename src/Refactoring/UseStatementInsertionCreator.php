@@ -523,6 +523,7 @@ final class UseStatementInsertionCreator
                 return mb_strlen($firstClassNameParts[$i]) <=> mb_strlen($secondClassNameParts[$i]);
             }
 
+            /** @var int|false $result */
             $result = substr_compare($firstClassNameParts[$i], $secondClassNameParts[$i], 0);
 
             return $result !== false ? $result : 0;
