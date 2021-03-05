@@ -235,8 +235,6 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
         foreach ($this->relationsStorage as $classlike) {
             $node = $this->relationsStorage[$classlike];
 
-            assert($node !== null);
-
             $this->processClassLikeRelations($node, $classlike);
 
             $this->storage->persist($classlike);
@@ -244,8 +242,6 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
         foreach ($this->traitUseStorage as $classlike) {
             $nodes = $this->traitUseStorage[$classlike];
-
-            assert($nodes !== null);
 
             foreach ($nodes as $node) {
                 $this->processTraitUseNode($node, $classlike);

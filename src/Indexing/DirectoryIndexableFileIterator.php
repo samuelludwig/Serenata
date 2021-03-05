@@ -2,10 +2,13 @@
 
 namespace Serenata\Indexing;
 
+use SplFileInfo;
 use IteratorIterator;
 
 /**
  * Iterator that iterates all indexable files in a directory.
+ *
+ * @extends IteratorIterator<int,SplFileInfo,DirectoryIndexableFileIterator>
  */
 final class DirectoryIndexableFileIterator extends IteratorIterator
 {
