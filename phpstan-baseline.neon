@@ -108,11 +108,6 @@ parameters:
 		-
 			message: "#^Missing @throws Serenata\\\\Analysis\\\\Typing\\\\Deduction\\\\TypeDeductionException annotation$#"
 			count: 1
-			path: src/Indexing/Visiting/ConstantIndexingVisitor.php
-
-		-
-			message: "#^Missing @throws Serenata\\\\Analysis\\\\Typing\\\\Deduction\\\\TypeDeductionException annotation$#"
-			count: 1
 			path: src/Indexing/Visiting/FunctionIndexingVisitor.php
 
 		-

@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
 
 use Serenata\Analysis\Typing\Deduction\TypeDeductionContext;
+use Serenata\Analysis\Typing\Deduction\TypeDeductionException;
 use Serenata\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
 use Serenata\Analysis\Typing\TypeResolvingDocblockTypeTransformer;
@@ -175,15 +176,19 @@ final class ConstantIndexingVisitor extends NodeVisitorAbstract
 
             $unresolvedType = $varDocumentation['type'];
         } else {
-            $unresolvedType = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
-                $node->value,
-                $this->textDocumentItem
-            ));
+            try {
+                $unresolvedType = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
+                    $node->value,
+                    $this->textDocumentItem
+                ));
+            } catch (TypeDeductionException $e) {
+                $unresolvedType = null;
+            }
         }
 
-        $filePosition = new FilePosition($this->textDocumentItem->getUri(), $range->getStart());
-
         if ($unresolvedType !== null) {
+            $filePosition = new FilePosition($this->textDocumentItem->getUri(), $range->getStart());
+
             $type = $this->typeResolvingDocblockTypeTransformer->resolve($unresolvedType, $filePosition);
         } else {
             $type = new IdentifierTypeNode('mixed');
