@@ -1,7 +1,7 @@
 /.serenata
 /.vscode
-/composer.lock
 /vendor
 /phpunit.xml
 /bin/distribution.phar
 .phpunit.result.cache
+result
